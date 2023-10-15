@@ -18,3 +18,9 @@ export const submitCreator = (payload) => {
         payload,
     }
  }
+ export const updateCreator = (payload) => { 
+    return {
+        type: ConstForm.update,
+        payload,
+    }
+ }

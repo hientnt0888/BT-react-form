@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { flushSync } from "react-dom"
 import { connect } from 'react-redux'
-import { submitCreator } from '../redux/redux-form/creator'
+import { submitCreator, updateCreator } from '../redux/redux-form/creator'
 
 class InputForm extends Component {
     state = {
@@ -39,7 +39,7 @@ class InputForm extends Component {
                     const checkMaSV = this.props.DSSV.find((i) => {
                         return +i.maSV === +this.state.currentState.maSV
                     })
-                    if (checkMaSV) {
+                    if (checkMaSV && this.props.svEdit === null) {
                         newError[prop] = "Mã sinh viên không được trùng"
                     }
                     if (currentState[prop].length === 0) {
@@ -125,23 +125,8 @@ class InputForm extends Component {
         const newError = this.handleValidate()
         const checkError = Object.values(newError).every((index) => index.length === 0)
         if (checkError) {
-            // this.props.dispatch(submitCreator(this.state.currentState))
-            // this.setState({
-                //     currentState: {
-                    //         maSV: "",
-        //         hoTen: "",
-        //         sdt: "",
-        //         email: "",
-        //     },
-        //     touch: {
-            //         maSV: false,
-            //         hoTen: false,
-            //         sdt: false,
-            //         email: false,
-            //     }
-            // })
-            // alert("thanh cong")
-            this.props.dispatch(submitCreator(this.state.currentState))
+            const action = this.props.svEdit ? updateCreator(this.state.currentState) : submitCreator(this.state.currentState)
+            this.props.dispatch(action)
             this.setState({
                 currentState: {
                     maSV: "",
@@ -157,9 +142,9 @@ class InputForm extends Component {
                 }
             })
             alert("thanh cong")
-            
+
         }
-        
+
         this.setState({
             touch: {
                 maSV: true,
@@ -167,15 +152,29 @@ class InputForm extends Component {
                 sdt: true,
                 email: true,
             }
-    
+
         })
     }
-    static getDerivedStateFromProps(newProps, currentState){
-        console.log(newProps,currentState,"life")
-        return null
+    static getDerivedStateFromProps(newProps, currentState) {
+        console.log({
+            newProps,
+            currentState,
+            // preProps: this.props,
+
+        })
+        if (newProps.svEdit !== null) {
+            if (newProps.svEdit.maSV !== currentState.currentState.maSV) {
+                return {
+                    currentState: newProps.svEdit,
+                }
+            }
+
+        }
+        return null;
     }
-    
+
     render() {
+        console.log(this.state.currentState, "state")
         console.log(this.props.svEdit)
         return (
             <div>
@@ -194,6 +193,7 @@ class InputForm extends Component {
                             <label htmlFor="maSV">Mã SV</label>
                             <input
                                 name="maSV"
+                                disabled = {this.props.svEdit}
                                 type="text"
                                 className="form-control"
                                 id="maSV"

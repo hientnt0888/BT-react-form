@@ -45,7 +45,7 @@ class FormList extends Component {
               textAlign: 'center'
             }}
           >
-            <tr>
+            <tr key={"trTable"}>
               <th scope="col">Mã SV</th>
               <th scope="col">Họ tên</th>
               <th scope="col">Số điện thoại</th>

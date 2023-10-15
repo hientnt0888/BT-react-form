@@ -14,6 +14,13 @@ export const formReducer = (state = STATE_TTSV, action) => {
         case ConstForm.edit:
             state.svEdit = action.payload
             return { ...state }
+        case ConstForm.update:
+            const newDSSV = [...state.DSSV]
+            const index = state.DSSV.findIndex((sv) => sv.maSV === action.payload.maSV)
+            newDSSV.splice(index, 1, action.payload)
+            state.DSSV = newDSSV;
+            state.svEdit = null;
+            return { ...state }
         default:
             return { ...state }
     }
