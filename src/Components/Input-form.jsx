@@ -32,9 +32,9 @@ class InputForm extends Component {
             switch (prop) {
                 case "maSV": {
                     newError[prop] = "";
-                    const regex_number = /^\d+$/;
+                    const regex_number = /^\d{3}$/;
                     if (!regex_number.test(currentState[prop])) {
-                        newError[prop] = "Mã sinh viên phải là số"
+                        newError[prop] = "Mã sinh viên phải là số có 3 chữ số"
                     }
                     const checkMaSV = this.props.DSSV.find((i) => {
                         return +i.maSV === +this.state.currentState.maSV
@@ -122,11 +122,26 @@ class InputForm extends Component {
     }
     handleSubmit = (event) => {
         event.preventDefault();
-      
         const newError = this.handleValidate()
         const checkError = Object.values(newError).every((index) => index.length === 0)
         if (checkError) {
-            this.props.dispatch(submitCreator(this.state.currentState))          
+            // this.props.dispatch(submitCreator(this.state.currentState))
+            // this.setState({
+                //     currentState: {
+                    //         maSV: "",
+        //         hoTen: "",
+        //         sdt: "",
+        //         email: "",
+        //     },
+        //     touch: {
+            //         maSV: false,
+            //         hoTen: false,
+            //         sdt: false,
+            //         email: false,
+            //     }
+            // })
+            // alert("thanh cong")
+            this.props.dispatch(submitCreator(this.state.currentState))
             this.setState({
                 currentState: {
                     maSV: "",
@@ -142,21 +157,26 @@ class InputForm extends Component {
                 }
             })
             alert("thanh cong")
-
+            
         }
-          this.setState({
+        
+        this.setState({
             touch: {
                 maSV: true,
                 hoTen: true,
                 sdt: true,
                 email: true,
             }
-
+    
         })
     }
-
+    static getDerivedStateFromProps(newProps, currentState){
+        console.log(newProps,currentState,"life")
+        return null
+    }
+    
     render() {
-        console.log(this.props)
+        console.log(this.props.svEdit)
         return (
             <div>
                 <h2 style={{
@@ -253,19 +273,17 @@ class InputForm extends Component {
                     <button
                         type="submit"
                         className="btn btn-primary"
-                        onClick={() => {
-                            
-                        }}
-                    >Thêm sinh viên</button>
+                    >{this.props.svEdit ? "Cập nhật" : "Thêm sinh siên"}</button>
                 </form>
 
             </div>
         )
     }
 }
-const mapStateToProps = (reducer) => {
+const mapStateToProps = (rootReducer) => {
     return {
-        DSSV: reducer.formReducer.DSSV,
+        DSSV: rootReducer.formReducer.DSSV,
+        svEdit: rootReducer.formReducer.svEdit,
     }
 }
 

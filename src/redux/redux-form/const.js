@@ -1,3 +1,5 @@
 export const ConstForm = {
-    submit: "ConstForm/submit"
+    submit: "ConstForm/submit",
+    edit: "ConstForm/edit",
+    delete: 'ConstForm/delete'
 }

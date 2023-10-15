@@ -1,9 +1,8 @@
 import { combineReducers, createStore } from 'redux'
-import { ConstForm } from "./redux-form/const"
 import { formReducer } from './redux-form/reducer'
 
 const rootReducers = combineReducers({
-    formReducer
+    formReducer,
 })
 
 export const store = createStore(
